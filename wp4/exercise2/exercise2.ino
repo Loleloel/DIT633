@@ -24,7 +24,7 @@ FspTimer g_timer;
 /* To allow the highest precision, we use half-steps by
  * toggling between one and two phases, giving us a total of
  * 4096 steps to rotate the motor 360 degrees. */
-const int g_servoStepTable[8][4] = {
+const uint8_t g_servoStepTable[8][4] = {
   // PIN_SERVO_1 - PIN_SERVO_2 - PIN_SERVO_3 - PIN_SERVO_4
   {  HIGH,         LOW,          LOW,          LOW },  // Step 1
   {  HIGH,         HIGH,         LOW,          LOW },  // Step 2
@@ -38,33 +38,6 @@ const int g_servoStepTable[8][4] = {
 volatile bool g_shouldStepMotor = false;
 unsigned long g_lastStep;
 uint8_t g_pulseCounter;
-
-// helper function to step motor the equivalent distance to one second on a clock
-void stepMotor() {
-  uint8_t currentStep, pulseCounter = 0;
-  unsigned long now;
-
-  while (pulseCounter < STEPS_PER_SECOND) {
-    if ((now = millis()) - g_lastStep >= PULSE_DELAY) {
-      currentStep = pulseCounter % 8; // get the current step in the stepTable to use
-
-      // send the pulse to the stepper motor on the four phases
-      digitalWrite(PIN_SERVO_1, g_servoStepTable[currentStep][0]);
-      digitalWrite(PIN_SERVO_2, g_servoStepTable[currentStep][1]);
-      digitalWrite(PIN_SERVO_3, g_servoStepTable[currentStep][2]);
-      digitalWrite(PIN_SERVO_4, g_servoStepTable[currentStep][3]);
-
-      // increment the pulse counter
-      pulseCounter++;
-      g_lastStep = now;
-    }
-  }
-
-  digitalWrite(PIN_SERVO_1, LOW);
-  digitalWrite(PIN_SERVO_2, LOW);
-  digitalWrite(PIN_SERVO_3, LOW);
-  digitalWrite(PIN_SERVO_4, LOW);
-}
 
 // Callback function used with interrupt, only reads the temperature sensor at
 // specific intervals.
@@ -124,12 +97,11 @@ void loop(void) {
     // increment the pulse counter
     g_lastStep = now;
     g_shouldStepMotor = ++g_pulseCounter < STEPS_PER_SECOND;
-  } else if (g_pulseCounter == STEPS_PER_SECOND){
+  } else if (g_pulseCounter == STEPS_PER_SECOND){ // if all pulses have been sent, set all PINS to LOW
     digitalWrite(PIN_SERVO_1, LOW);
     digitalWrite(PIN_SERVO_2, LOW);
     digitalWrite(PIN_SERVO_3, LOW);
     digitalWrite(PIN_SERVO_4, LOW);
     g_pulseCounter = 0;
   }
-
 }
