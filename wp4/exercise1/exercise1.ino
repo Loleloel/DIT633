@@ -1,11 +1,11 @@
 // File: exercise1.ino
 
 /* 
- * WP3 - Exercise 1
+ * WP4 - Exercise 1
  * John Dickson, Oliver Hansson, Sebastian Vingård Larsson
- * 2026-02-XX
+ * 2026-02-24
  * group: 27
- * Submission code: 
+ * Submission code: XlvS5W
  */
 
 #include "FspTimer.h"

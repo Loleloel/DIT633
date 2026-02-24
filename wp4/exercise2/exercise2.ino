@@ -5,7 +5,7 @@
  * John Dickson, Oliver Hansson, Sebastian Vingård Larsson
  * 2026-02-24
  * group: 27
- * Submission code: 
+ * Submission code: XlvS5W
  */
 
 #include "FspTimer.h"
@@ -38,6 +38,7 @@ const uint8_t g_servoStepTable[8][4] = {
 volatile bool g_shouldStepMotor = false;
 unsigned long g_lastStep;
 uint8_t g_pulseCounter;
+int counter = 0;
 
 // Callback function used with interrupt, only reads the temperature sensor at
 // specific intervals.
@@ -103,5 +104,7 @@ void loop(void) {
     digitalWrite(PIN_SERVO_3, LOW);
     digitalWrite(PIN_SERVO_4, LOW);
     g_pulseCounter = 0;
+    Serial.print(++counter);
+    Serial.println("s");
   }
 }
