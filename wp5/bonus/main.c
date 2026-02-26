@@ -49,11 +49,11 @@ int main(int argc, char *argv[]) {
 uint8_t validateArgs(char *argv[]) {
     // check if the args are of correct width and size by bitshifting
     // and checking if any non-zero bits exist beyond the expected width
-    if ((argv[1][0] - '0') >> 1) return 0; // return false
-    if ((argv[2][0] - '0') >> 3) return 0;
-    if ((argv[3][0] - '0') >> 2) return 0;
-    if ((argv[4][0] - '0') >> 1) return 0;
-    if ((argv[5][0] - '0') >> 1) return 0;
+    if ((argv[1][0] - '0') >> 1 || argv[1][1] != '\0') return 0; // return false
+    if ((argv[2][0] - '0') >> 3 || argv[2][1] != '\0') return 0;
+    if ((argv[3][0] - '0') >> 2 || argv[3][1] != '\0') return 0;
+    if ((argv[4][0] - '0') >> 1 || argv[4][1] != '\0') return 0;
+    if ((argv[5][0] - '0') >> 1 || argv[5][1] != '\0') return 0;
 
     return 1;
 }
